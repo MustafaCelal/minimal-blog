@@ -16,15 +16,25 @@ body {
 }
 
 /* Typography */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-weight: 600;
     margin-bottom: 10px;
     color: #000;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.4rem; }
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
 
 p {
     margin-bottom: 15px;
@@ -49,6 +59,8 @@ nav {
     gap: 20px;
     margin-bottom: 20px;
     align-items: center;
+    justify-content: flex-end;
+    /* Right align */
 }
 
 nav a {
@@ -112,6 +124,7 @@ label {
 }
 
 input[type="text"],
+input[type="password"],
 textarea {
     width: 100%;
     padding: 10px;
@@ -122,6 +135,7 @@ textarea {
 }
 
 input[type="text"]:focus,
+input[type="password"]:focus,
 textarea:focus {
     border-color: #000;
 }
@@ -147,4 +161,57 @@ footer {
     text-align: center;
     font-size: 0.8rem;
     color: #999;
+}
+
+/* Admin Styles */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-table th {
+    font-weight: 600;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
+.btn-delete {
+    border-color: #d00;
+    color: #d00;
+}
+
+.btn-delete:hover {
+    background: #d00;
+    color: #fff;
+}
+
+/* Login Styles */
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 50px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
 }

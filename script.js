@@ -42,6 +42,34 @@ const api = {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return await response.json();
+    },
+
+    updatePost: async function (id, post) {
+        console.log(`Updating post ${id}...`);
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(post)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    },
+
+    deletePost: async function (id) {
+        console.log(`Deleting post ${id}...`);
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return true;
     }
 };
 
@@ -50,6 +78,7 @@ const app = {
     posts: [],
     currentPage: 'home',
     isLoading: false,
+    isLoggedIn: false,
 
     // Initialization
     init: function () {
@@ -165,13 +194,96 @@ const app = {
         window.scrollTo(0, 0);
     },
 
+    renderLogin: function () {
+        this.currentPage = 'login';
+        const appDiv = document.getElementById('app');
+
+        appDiv.innerHTML = `
+            <section class="login-container">
+                <h2>Admin Login</h2>
+                <form onsubmit="app.handleLogin(event)">
+                    <div>
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </section>
+        `;
+        window.scrollTo(0, 0);
+    },
+
+    renderAdmin: async function () {
+        if (!this.isLoggedIn) {
+            this.renderLogin();
+            return;
+        }
+
+        this.currentPage = 'admin';
+        const appDiv = document.getElementById('app');
+
+        this.isLoading = true;
+        appDiv.innerHTML = '<div style="text-align: center; margin-top: 50px;">Loading...</div>';
+
+        try {
+            this.posts = await api.fetchPosts();
+        } catch (error) {
+            console.error("Failed to fetch posts:", error);
+            appDiv.innerHTML = '<p>Error loading posts.</p>';
+            return;
+        } finally {
+            this.isLoading = false;
+        }
+
+        let rowsHtml = this.posts.map(post => `
+            <tr>
+                <td>${post.title}</td>
+                <td>${post.date}</td>
+                <td style="text-align: right;">
+                    <button class="btn-small" onclick="app.renderEditPost(${post.id})">Edit</button>
+                    <button class="btn-small btn-delete" onclick="app.handleDeletePost(${post.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+
+        if (this.posts.length === 0) {
+            rowsHtml = '<tr><td colspan="3">No posts found.</td></tr>';
+        }
+
+        appDiv.innerHTML = `
+            <section class="admin-panel">
+                <div class="admin-header">
+                    <h2>Admin Panel</h2>
+                    <button onclick="app.renderAddPost()">+ Add New Post</button>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                    </tbody>
+                </table>
+            </section>
+        `;
+        window.scrollTo(0, 0);
+    },
+
     renderAddPost: function () {
         this.currentPage = 'add-post';
         const appDiv = document.getElementById('app');
 
         appDiv.innerHTML = `
             <section class="add-post-form">
-                <a class="back-link" href="#" onclick="app.renderHome(); return false;">&larr; Back to Home</a>
+                <a class="back-link" href="#" onclick="app.renderAdmin(); return false;">&larr; Back to Admin</a>
                 <h2>Add New Post</h2>
                 <form onsubmit="app.handleAddPost(event)">
                     <div>
@@ -197,7 +309,58 @@ const app = {
         window.scrollTo(0, 0);
     },
 
+    renderEditPost: function (id) {
+        this.currentPage = 'edit-post';
+        const post = this.posts.find(p => p.id === id);
+        const appDiv = document.getElementById('app');
+
+        if (!post) {
+            appDiv.innerHTML = '<p>Post not found.</p>';
+            return;
+        }
+
+        appDiv.innerHTML = `
+            <section class="add-post-form">
+                <a class="back-link" href="#" onclick="app.renderAdmin(); return false;">&larr; Back to Admin</a>
+                <h2>Edit Post</h2>
+                <form onsubmit="app.handleEditPost(event, ${id})">
+                    <div>
+                        <label for="title">Title</label>
+                        <input type="text" id="title" value="${post.title}" required>
+                    </div>
+                    <div>
+                        <label for="summary">Summary</label>
+                        <input type="text" id="summary" value="${post.summary}" required>
+                    </div>
+                    <div>
+                        <label for="content">Content</label>
+                        <textarea id="content" rows="10" required>${post.content}</textarea>
+                    </div>
+                    <div>
+                        <label for="author">Author</label>
+                        <input type="text" id="author" value="${post.author}" required>
+                    </div>
+                    <button type="submit" id="submit-btn">Update Post</button>
+                </form>
+            </section>
+        `;
+        window.scrollTo(0, 0);
+    },
+
     // Actions
+    handleLogin: function (event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === 'admin' && password === 'admin') {
+            this.isLoggedIn = true;
+            this.renderAdmin();
+        } else {
+            alert('Invalid credentials');
+        }
+    },
+
     handleAddPost: async function (event) {
         event.preventDefault();
 
@@ -223,12 +386,64 @@ const app = {
 
         try {
             await api.createPost(newPost);
-            this.renderHome();
+            this.renderAdmin();
         } catch (error) {
             console.error("Failed to create post:", error);
             alert("Failed to create post. Please try again.");
             submitBtn.disabled = false;
             submitBtn.innerText = originalBtnText;
+        }
+    },
+
+    handleEditPost: async function (event, id) {
+        event.preventDefault();
+
+        const submitBtn = document.getElementById('submit-btn');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Updating...";
+
+        const title = document.getElementById('title').value;
+        const summary = document.getElementById('summary').value;
+        const content = document.getElementById('content').value;
+        const author = document.getElementById('author').value;
+
+        // Keep original date or update it? Let's keep original date for now.
+        const originalPost = this.posts.find(p => p.id === id);
+
+        const updatedPost = {
+            title: title,
+            summary: summary,
+            content: content,
+            author: author,
+            date: originalPost.date
+        };
+
+        try {
+            await api.updatePost(id, updatedPost);
+            this.renderAdmin();
+        } catch (error) {
+            console.error("Failed to update post:", error);
+            alert("Failed to update post. Please try again.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalBtnText;
+        }
+    },
+
+    handleDeletePost: async function (id) {
+        if (!confirm("Are you sure you want to delete this post?")) {
+            return;
+        }
+
+        try {
+            await api.deletePost(id);
+            // Wait a bit to ensure server processes delete before fetching again
+            // Although await should handle it, sometimes json-server is fast but the file write is async
+            // But usually await fetch is enough.
+            this.renderAdmin();
+        } catch (error) {
+            console.error("Failed to delete post:", error);
+            alert("Failed to delete post. Please try again.");
         }
     }
 };

@@ -1,46 +1,46 @@
 {
-    "posts": [
-        {
-            "id": 1,
-            "title": "The Beauty of Minimalism",
-            "summary": "Why less is often more in design and life.",
-            "content": "Minimalism is not about subtraction for the sake of subtraction. It is about removing the unnecessary so the necessary may speak. In web design, this means focusing on content, typography, and whitespace. By stripping away decorative elements, we allow the user to focus on what truly matters: the message.",
-            "author": "Jane Doe",
-            "date": "2023-10-27"
-        },
-        {
-            "id": 2,
-            "title": "Getting Started with Vanilla JS",
-            "summary": "You don't always need a framework.",
-            "content": "Modern JavaScript is powerful. With ES6+ features, we can build complex applications without the overhead of large frameworks. This blog is a testament to that. It uses no libraries, just pure HTML, CSS, and JavaScript. Understanding the core language makes you a better developer, regardless of the tools you use.",
-            "author": "John Smith",
-            "date": "2023-11-15"
-        },
-        {
-            "title": "API Test",
-            "summary": "Testing API",
-            "content": "API content",
-            "author": "API Tester",
-            "date": "2025-12-02",
-            "id": 3
-        },
-        {
-            "title": "title",
-            "summary": "sum",
-            "content": "c",
-            "author": "a",
-            "date": "2025-12-02",
-            "id": 4
-        }
-    ],
-    "pages": {
-        "about": {
-            "title": "About Us",
-            "content": "We are a collective of minimalists who believe in the power of simplicity. This blog is our platform to share thoughts on design, coding, and living a clutter-free life."
-        },
-        "contact": {
-            "title": "Contact Us",
-            "content": "Have questions or suggestions? Reach out to us at hello@minimalblog.com or follow us on social media."
-        }
+  "posts": [
+    {
+      "id": 1,
+      "title": "The Beauty of Minimalism",
+      "summary": "Why less is often more in design and life.",
+      "content": "Minimalism is not about subtraction for the sake of subtraction. It is about removing the unnecessary so the necessary may speak. In web design, this means focusing on content, typography, and whitespace. By stripping away decorative elements, we allow the user to focus on what truly matters: the message.",
+      "author": "Jane Doe",
+      "date": "2023-10-27"
+    },
+    {
+      "id": 2,
+      "title": "Getting Started with Vanilla JS",
+      "summary": "You don't always need a framework.",
+      "content": "Modern JavaScript is powerful. With ES6+ features, we can build complex applications without the overhead of large frameworks. This blog is a testament to that. It uses no libraries, just pure HTML, CSS, and JavaScript. Understanding the core language makes you a better developer, regardless of the tools you use.",
+      "author": "John Smith",
+      "date": "2023-11-15"
+    },
+    {
+      "title": "API Test",
+      "summary": "Testing API",
+      "content": "API content",
+      "author": "API Tester",
+      "date": "2025-12-02",
+      "id": 3
+    },
+    {
+      "title": "Edited Admin Post",
+      "summary": "Admin Summary",
+      "content": "Admin Content",
+      "author": "Admin",
+      "date": "2025-12-02",
+      "id": 5
     }
+  ],
+  "pages": {
+    "about": {
+      "title": "About Us",
+      "content": "We are a collective of minimalists who believe in the power of simplicity. This blog is our platform to share thoughts on design, coding, and living a clutter-free life."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "content": "Have questions or suggestions? Reach out to us at hello@minimalblog.com or follow us on social media."
+    }
+  }
 }
