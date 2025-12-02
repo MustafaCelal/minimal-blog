@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#" onclick="app.renderHome(); return false;">Home</a>
+            <a href="#" onclick="app.renderPage('about'); return false;">About</a>
+            <a href="#" onclick="app.renderPage('contact'); return false;">Contact</a>
+            <a href="#" onclick="app.renderAddPost(); return false;" style="float: right;">+ Add Post</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main id="app">
+        <!-- Content will be injected here -->
+    </main>
+
+    <footer>
+        <hr>
+        <p>&copy; 2023 Minimal Blog</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
